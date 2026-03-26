@@ -4,311 +4,789 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Manual – Mötesbokning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 16px;
-      background: #f5f7fa;
-      color: #222;
-      line-height: 1.55;
+    :root {
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --surface2: #f9fafb;
+      --border: #e3e7ef;
+      --border-focus: #b0bacc;
+      --accent: #3b6ef8;
+      --accent-light: #eef2fe;
+      --accent-hover: #2d5de0;
+      --green: #16a34a;
+      --green-light: #dcfce7;
+      --orange: #ea580c;
+      --orange-light: #fff3eb;
+      --red: #dc2626;
+      --red-light: #fef2f2;
+      --yellow: #d97706;
+      --yellow-light: #fffbeb;
+      --text: #111827;
+      --text-muted: #6b7280;
+      --text-soft: #374151;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+      --shadow: 0 2px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-hover: 0 4px 16px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.07);
+      --r: 10px;
+      --r-sm: 7px;
     }
-    .container { max-width: 760px; margin: 0 auto; }
-
-    .menu, .submenu {
+ 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+ 
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 16px 60px;
+    }
+ 
+    /* ── HEADER ── */
+    .site-header {
+      padding: 28px 0 20px;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       gap: 12px;
+      border-bottom: 1px solid var(--border);
       margin-bottom: 24px;
     }
-
-    .card {
-      background: white;
-      border-radius: 10px;
-      padding: 18px 22px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      cursor: pointer;
-      font-size: 17px;
-      font-weight: 600;
-      transition: all 0.18s;
+ 
+    .header-logo {
+      width: 36px; height: 36px;
+      background: var(--accent);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(59,110,248,0.3);
     }
-
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-    }
-
-    .section {
-      display: none;
-      background: white;
-      border-radius: 10px;
-      padding: 16px 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-
-    .back-btn {
-      background: #0066cc;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-      margin-bottom: 16px;
-      transition: background 0.2s;
-    }
-
-    .back-btn:hover { background: #0055b3; }
-
-    h1 {
-      font-size: 22px;
-      margin: 0 0 18px;
-      color: #1a3c5e;
-    }
-
-    h2 {
-      font-size: 18px;
-      margin: 24px 0 10px;
-      color: #004080;
-    }
-
-    .super-viktigt {
-      color: #c41e3a;
+ 
+    .header-text h1 {
+      font-size: 1rem;
       font-weight: 700;
-      margin-top: 1.4em;
+      color: var(--text);
+      letter-spacing: -0.01em;
     }
-
-    .viktigast {
-      color: #b22222;
-      font-weight: 800;
-      background: #fff5f5;
-      padding: 10px 14px;
-      border-left: 5px solid #c41e3a;
-      border-radius: 6px;
-      margin: 16px 0;
+ 
+    .header-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 400;
     }
-
-    ol {
-      padding-left: 24px;
-      margin: 12px 0;
+ 
+    /* ── VIEWS ── */
+    .view { display: none; }
+    .view.active { display: block; animation: fadeIn 0.18s ease; }
+ 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-
-    li {
-      margin: 8px 0;
+ 
+    /* ── MENU CARDS ── */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
-
-    .example {
-      background: #f8f9fa;
-      border: 1px solid #e0e4e8;
-      border-radius: 8px;
-      padding: 16px;
-      margin: 16px 0;
-      font-size: 15px;
-      white-space: pre-wrap;
-    }
-
-    .checklist ol {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .checklist li {
-      padding-left: 32px;
+ 
+    .menu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: var(--shadow-sm);
       position: relative;
-      margin: 12px 0;
+      overflow: hidden;
     }
-
-    .checklist li:before {
-      content: "☐";
+ 
+    .menu-card::before {
+      content: '';
       position: absolute;
-      left: 0;
-      font-size: 1.2em;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--r) var(--r) 0 0;
+    }
+ 
+    .mc-blue::before { background: var(--accent); }
+    .mc-green::before { background: var(--green); }
+    .mc-orange::before { background: var(--orange); }
+    .mc-yellow::before { background: var(--yellow); }
+    .mc-red::before { background: var(--red); }
+ 
+    .menu-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-1px);
+      border-color: var(--border-focus);
+    }
+ 
+    .menu-card:active { transform: translateY(0); }
+ 
+    .mc-icon {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+ 
+    .mc-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+ 
+    .mc-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+ 
+    /* ── TOPBAR ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+ 
+    .back-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      color: var(--text-soft);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.12s;
+      white-space: nowrap;
+      box-shadow: var(--shadow-sm);
+    }
+ 
+    .back-btn:hover {
+      background: var(--accent-light);
+      border-color: #c7d4fd;
+      color: var(--accent);
+    }
+ 
+    .topbar-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+ 
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+ 
+    /* ── SUB CARDS ── */
+    .sub-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+ 
+    .sub-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+ 
+    .sub-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+ 
+    .sub-card .sc-icon { font-size: 1.4rem; display: block; margin-bottom: 6px; }
+    .sub-card .sc-lbl { font-size: 0.75rem; font-weight: 600; color: var(--text-soft); }
+ 
+    /* ── STEP LIST ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+ 
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 10px 13px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      box-shadow: var(--shadow-sm);
+    }
+ 
+    .step-n {
+      min-width: 22px; height: 22px;
+      border-radius: 5px;
+      font-size: 0.67rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+ 
+    .step-n.blue { background: var(--accent-light); color: var(--accent); }
+    .step-n.orange { background: var(--orange-light); color: var(--orange); }
+    .step-n.green { background: var(--green-light); color: var(--green); }
+ 
+    .step small {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      margin-top: 3px;
+    }
+ 
+    /* ── ALERTS ── */
+    .alert {
+      border-radius: var(--r);
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 0.86rem;
+      line-height: 1.55;
+      border: 1px solid;
+    }
+ 
+    .alert-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+ 
+    .alert-red {
+      background: var(--red-light);
+      border-color: #fca5a5;
+      color: var(--text-soft);
+    }
+    .alert-red .alert-title { color: var(--red); }
+ 
+    .alert-green {
+      background: var(--green-light);
+      border-color: #86efac;
+      color: var(--text-soft);
+    }
+    .alert-green .alert-title { color: var(--green); }
+ 
+    .alert-blue {
+      background: var(--accent-light);
+      border-color: #c7d4fd;
+      color: var(--text-soft);
+    }
+    .alert-blue .alert-title { color: var(--accent); }
+ 
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); margin: 18px 0; }
+ 
+    /* ── H2 ── */
+    h2 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 18px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    h2:first-child { margin-top: 0; }
+ 
+    /* ── INFO LIST ── */
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+ 
+    .info-list li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 8px 12px;
+      font-size: 0.86rem;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+ 
+    .info-list li .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+ 
+    /* ── EXAMPLE BOX ── */
+    .example-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--r);
+      padding: 16px;
+      font-size: 0.86rem;
+      white-space: pre-wrap;
+      line-height: 1.7;
+      color: var(--text-soft);
+      box-shadow: var(--shadow-sm);
+    }
+ 
+    /* ── CHECKLIST ── */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+ 
+    .check-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 11px 13px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 0.86rem;
+      cursor: pointer;
+      transition: all 0.12s;
+      box-shadow: var(--shadow-sm);
+      user-select: none;
+    }
+ 
+    .check-item:hover { border-color: var(--accent); background: var(--accent-light); }
+ 
+    .check-item.checked {
+      background: var(--green-light);
+      border-color: #86efac;
+      opacity: 0.7;
+    }
+ 
+    .check-box {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border-focus);
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.12s;
+      background: var(--surface);
+    }
+ 
+    .check-item.checked .check-box {
+      background: var(--green);
+      border-color: var(--green);
+    }
+ 
+    .check-box-tick {
+      display: none;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+    }
+ 
+    .check-item.checked .check-box-tick { display: block; }
+ 
+    /* ── QUOTE CARDS (Förankring) ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.69rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 4px 10px;
+      border-radius: 99px;
+      margin-bottom: 10px;
+      border: 1px solid;
+    }
+ 
+    .badge-blue { background: var(--accent-light); color: var(--accent); border-color: #c7d4fd; }
+    .badge-orange { background: var(--orange-light); color: var(--orange); border-color: #fed7aa; }
+    .badge-green { background: var(--green-light); color: var(--green); border-color: #86efac; }
+ 
+    .quote-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      line-height: 1.65;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      padding-left: 20px;
+    }
+ 
+    .quote-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 10px; bottom: 10px;
+      width: 3px;
+      border-radius: 2px;
+    }
+ 
+    .quote-card.qc-blue::before { background: var(--accent); }
+    .quote-card.qc-orange::before { background: var(--orange); }
+    .quote-card.qc-green::before { background: var(--green); }
+ 
+    .quote-note {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.77rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+ 
+    .technique-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 13px 15px;
+      margin-bottom: 8px;
+      font-size: 0.86rem;
+      line-height: 1.6;
+      box-shadow: var(--shadow-sm);
+    }
+ 
+    .tc-when {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+ 
+    .tc-say {
+      color: var(--text-soft);
+      font-style: italic;
+      border-left: 2px solid var(--border-focus);
+      padding-left: 10px;
+    }
+ 
+    strong { color: var(--text); font-weight: 600; }
+ 
+    @media (max-width: 400px) {
+      .menu-grid, .sub-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-
+ 
 <div class="container">
-
-  <!-- HUVUDMENY -->
-  <div id="menu" class="menu">
-    <div class="card" onclick="show('info')">Info att ta</div>
-    <div class="card" onclick="show('exempel')">Exempel anteckning</div>
-    <div class="card" onclick="show('bra')">Bra att veta</div>
-    <div class="card" onclick="show('avsluta')">Gör detta när du är färdig</div>
-  </div>
-
-  <!-- INFO ATT TA → väljer lead-typ -->
-  <div id="info" class="section">
-    <button class="back-btn" onclick="backToMain()">⬅ Till start</button>
-    <h1>Info att ta</h1>
-    <div class="submenu">
-      <div class="card" onclick="show('solcell')">Solcells / Sol+batteri lead</div>
-      <div class="card" onclick="show('batteri')">Batteri lead</div>
+ 
+  <div class="site-header">
+    <div class="header-logo">📋</div>
+    <div class="header-text">
+      <h1>Manual – Mötesbokning</h1>
+      <p>Intern guide för mötesbokar</p>
     </div>
   </div>
-
-  <!-- SOLCELL / SOL+BATTERI -->
-  <div id="solcell" class="section">
-    <button class="back-btn" onclick="backToInfo()">⬅ Tillbaka</button>
-    <h1>Solcells / Sol+batteri lead</h1>
-
-    <p><strong>Ta kontroll info</strong></p>
-    <ol>
-      <li>Hur många fastighetsägare?</li>
-      <li>Storlek på säkring?</li>
-      <li>Årliga förbrukning? – i kWh</li>
-      <li>Taktyp? – falsad plåt, tegel, betong?</li>
-      <li>Ålder på tak? – ungefärlig</li>
-      <li>Lutar taket lätt, vanligt eller brant?</li>
-    </ol>
-
-    <p class="super-viktigt">Super viktigt:</p>
-    <ol start="7">
-      <li>Dubbelkolla adressen</li>
-      <li>Fråga om numret du ringt till är samma som bolagen kan nå personen på.</li>
-      <li>Ta email adressen<br><small>Ifall kunden jiddrar om mail; det är för att personen i fråga ska få förslagen på mail efteråt</small></li>
-    </ol>
-
-    <div class="viktigast">
-      Viktigast av allt:<br>
-      10. Kom överens om ett 2 timmars spann bolagen kan ringa upp på (max 7 dagar fram i tiden)
+ 
+  <!-- ══ HUVUDMENY ══ -->
+  <div id="menu" class="view active">
+    <div class="menu-grid">
+      <div class="menu-card mc-blue" onclick="show('info')">
+        <span class="mc-icon">📋</span>
+        <div class="mc-title">Info att ta</div>
+        <div class="mc-sub">Sol & batteri</div>
+      </div>
+      <div class="menu-card mc-orange" onclick="show('forankring')">
+        <span class="mc-icon">🎯</span>
+        <div class="mc-title">Förankring</div>
+        <div class="mc-sub">Frågor & tekniker</div>
+      </div>
+      <div class="menu-card mc-green" onclick="show('exempel')">
+        <span class="mc-icon">📝</span>
+        <div class="mc-title">Exempel anteckning</div>
+        <div class="mc-sub">Mall att följa</div>
+      </div>
+      <div class="menu-card mc-yellow" onclick="show('bra')">
+        <span class="mc-icon">💡</span>
+        <div class="mc-title">Bra att veta</div>
+        <div class="mc-sub">Referensinfo</div>
+      </div>
+      <div class="menu-card mc-red" onclick="show('avsluta')" style="grid-column: span 2;">
+        <span class="mc-icon">✅</span>
+        <div class="mc-title">Gör detta när du är färdig</div>
+        <div class="mc-sub">Checklista för godkänt lead</div>
+      </div>
     </div>
   </div>
-
-  <!-- BATTERI LEAD -->
-  <div id="batteri" class="section">
-    <button class="back-btn" onclick="backToInfo()">⬅ Tillbaka</button>
-    <h1>Batteri lead</h1>
-
-    <p><strong>Ta kontroll info:</strong></p>
-    <ol>
-      <li><em>Hur många fastighetsägare?</em></li>
-      <li><em>Storlek på säkringen?</em></li>
-      <li><em>Vad har de för installerad effekt på anläggningen?</em><br>– Alternativt: Hur många paneler och ungefärligt årtal.</li>
-      <li><em>Vad producerar deras anläggning per år? – i kWh</em></li>
-      <li><em>Årlig förbrukning. – i kWh</em></li>
-    </ol>
-
-    <p class="super-viktigt">Super viktigt:</p>
-    <ol start="6">
-      <li><em>Dubbelkolla adressen</em></li>
-      <li><em>Fråga om numret du ringt till är samma som bolagen kan nå personen på.</em></li>
-      <li><em>Ta email adressen</em><br><small>Ifall kunden jiddrar om mail; det är för att personen i fråga ska få förslagen på mail efteråt</small></li>
-    </ol>
-
-    <div class="viktigast">
-      Viktigast av allt:<br>
-      9. Kom överens om ett 2 timmars spann bolagen kan ringa upp på (max 7 dagar fram i tiden)<br>
-      10. Se till att dem är införstådda på 1–3 olika representanter hör av sig från olika bolag.
+ 
+  <!-- ══ INFO ATT TA ══ -->
+  <div id="info" class="view">
+    <div class="topbar">
+      <button class="back-btn" onclick="show('menu')">← Till start</button>
+      <span class="topbar-title">Info att ta</span>
+    </div>
+    <div class="sub-grid">
+      <div class="sub-card" onclick="show('solcell')">
+        <span class="sc-icon">☀️</span>
+        <span class="sc-lbl">Solcell / Sol+batteri</span>
+      </div>
+      <div class="sub-card" onclick="show('batteri')">
+        <span class="sc-icon">🔋</span>
+        <span class="sc-lbl">Batteri lead</span>
+      </div>
     </div>
   </div>
-
-  <!-- EXEMPEL ANTECKNING -->
-  <div id="exempel" class="section">
-    <button class="back-btn" onclick="backToMain()">⬅ Till start</button>
-    <h1>Exempel anteckning</h1>
-    <div class="example">
-Kontakta: 20/11, 14:00-16:00.
+ 
+  <!-- ══ SOLCELL ══ -->
+  <div id="solcell" class="view">
+    <div class="topbar">
+      <button class="back-btn" onclick="show('info')">← Tillbaka</button>
+      <span class="topbar-title">Solcell / Sol+batteri</span>
+    </div>
+    <div class="section-label">Ta kontroll info</div>
+    <div class="steps">
+      <div class="step"><span class="step-n blue">1</span><span>Hur många fastighetsägare?</span></div>
+      <div class="step"><span class="step-n blue">2</span><span>Storlek på säkring?</span></div>
+      <div class="step"><span class="step-n blue">3</span><span>Årlig förbrukning? – i kWh</span></div>
+      <div class="step"><span class="step-n blue">4</span><span>Taktyp? – falsad plåt, tegel, betong?</span></div>
+      <div class="step"><span class="step-n blue">5</span><span>Ålder på tak? – ungefärlig</span></div>
+      <div class="step"><span class="step-n blue">6</span><span>Lutar taket lätt, vanligt eller brant?</span></div>
+    </div>
+    <div class="alert alert-red">
+      <div class="alert-title">⚡ Super viktigt</div>
+      <div class="steps" style="margin:0; gap:5px;">
+        <div class="step" style="background:#fff5f5; border-color:#fca5a5;"><span class="step-n orange">7</span><span>Dubbelkolla adressen</span></div>
+        <div class="step" style="background:#fff5f5; border-color:#fca5a5;"><span class="step-n orange">8</span><span>Fråga om numret du ringt till är samma som bolagen kan nå personen på</span></div>
+        <div class="step" style="background:#fff5f5; border-color:#fca5a5;"><span class="step-n orange">9</span><span>Ta email adressen<small>Ifall kunden jiddrar om mail; det är för att personen ska få förslagen på mail efteråt</small></span></div>
+      </div>
+    </div>
+    <div class="alert alert-green">
+      <div class="alert-title">🏆 Viktigast av allt</div>
+      <strong>10.</strong> Kom överens om ett 2 timmars spann bolagen kan ringa upp på <em>(max 7 dagar fram i tiden)</em>
+    </div>
+  </div>
+ 
+  <!-- ══ BATTERI ══ -->
+  <div id="batteri" class="view">
+    <div class="topbar">
+      <button class="back-btn" onclick="show('info')">← Tillbaka</button>
+      <span class="topbar-title">Batteri lead</span>
+    </div>
+    <div class="section-label">Ta kontroll info</div>
+    <div class="steps">
+      <div class="step"><span class="step-n blue">1</span><span>Hur många fastighetsägare?</span></div>
+      <div class="step"><span class="step-n blue">2</span><span>Storlek på säkringen?</span></div>
+      <div class="step"><span class="step-n blue">3</span><span>Installerad effekt på anläggningen?<small>Alternativt: hur många paneler och ungefärligt årtal</small></span></div>
+      <div class="step"><span class="step-n blue">4</span><span>Vad producerar anläggningen per år? – i kWh</span></div>
+      <div class="step"><span class="step-n blue">5</span><span>Årlig förbrukning – i kWh</span></div>
+    </div>
+    <div class="alert alert-red">
+      <div class="alert-title">⚡ Super viktigt</div>
+      <div class="steps" style="margin:0; gap:5px;">
+        <div class="step" style="background:#fff5f5; border-color:#fca5a5;"><span class="step-n orange">6</span><span>Dubbelkolla adressen</span></div>
+        <div class="step" style="background:#fff5f5; border-color:#fca5a5;"><span class="step-n orange">7</span><span>Fråga om numret du ringt till är samma som bolagen kan nå personen på</span></div>
+        <div class="step" style="background:#fff5f5; border-color:#fca5a5;"><span class="step-n orange">8</span><span>Ta email adressen<small>Ifall kunden jiddrar om mail; det är för att personen ska få förslagen på mail efteråt</small></span></div>
+      </div>
+    </div>
+    <div class="alert alert-green">
+      <div class="alert-title">🏆 Viktigast av allt</div>
+      <strong>9.</strong> Kom överens om ett 2 timmars spann bolagen kan ringa upp på <em>(max 7 dagar fram i tiden)</em><br><br>
+      <strong>10.</strong> Se till att dem är införstådda på att 1–3 olika representanter hör av sig från olika bolag.
+    </div>
+  </div>
+ 
+  <!-- ══ FÖRANKRING ══ -->
+  <div id="forankring" class="view">
+    <div class="topbar">
+      <button class="back-btn" onclick="show('menu')">← Till start</button>
+      <span class="topbar-title">Förankring</span>
+    </div>
+ 
+    <span class="badge badge-blue">Undersamtalet</span>
+    <div class="quote-card qc-blue">
+      "Jag tänkte på det... ni har ju kollat lite på batterier, vad är det ni har tänkt att ett batteri ska tillföra eller lösa för er?"
+    </div>
+    <div class="quote-card qc-blue">
+      "Vad är viktigt för dig när det kommer till dessa typer av investeringar?"
+      <span class="quote-note">Ex. initial investeringen, återbetalningstiden, m.m.</span>
+    </div>
+    <div class="quote-card qc-blue">
+      "Har ni någon specifik tid som ni hade önskat att detta var igenom, eller sitter ni lugnt i båten tills allt ser bra ut?"
+    </div>
+ 
+    <div class="divider"></div>
+ 
+    <span class="badge badge-orange">Mot slutet</span>
+    <div class="quote-card qc-orange">
+      "Så att vi kan skapa ett så anpassat förslag till dig som möjligt, vad är det som inte har känts bra med de tidigare förslagen ni tagit in?"
+    </div>
+ 
+    <div class="divider"></div>
+ 
+    <span class="badge badge-green">Tekniker</span>
+    <div class="technique-card">
+      <div class="tc-when">🔄 När du rör dig till nästa del</div>
+      <div class="tc-say">"Alright så om jag förstår det helt rätt var det X och Y, som inte kändes bra"</div>
+    </div>
+    <div class="technique-card">
+      <div class="tc-when">🎯 När du börjar röra dig mot avslut</div>
+      <div class="tc-say">"Ponera att vi löser X och Y, men samtidigt tar fram ett batteri med iallafall 2 gånger större storlek i samma prisklass, bör vi ringa dig igen då?"</div>
+    </div>
+  </div>
+ 
+  <!-- ══ EXEMPEL ══ -->
+  <div id="exempel" class="view">
+    <div class="topbar">
+      <button class="back-btn" onclick="show('menu')">← Till start</button>
+      <span class="topbar-title">Exempel anteckning</span>
+    </div>
+    <div class="example-box">Kontakta: 20/11, 14:00-16:00.
 Kommentar: Intresserad av batteri.
-
+ 
 Anders har installerat solceller för några år sedan och är överlag nöjd. Har inte installerat batteri i och med att han inte fått ihop det tidigare. Vi pratade om stödtjänster och effektavgifter vilket gjorde honom intresserad. Hade en del frågor om hur han skulle göra med ansökan om grönt avdrag och antalet fastighetsägare då han hade problem med det förra gången. Var kluven på om han behövde större än 15kWh, då han drar väldigt mycket el under vintern med en värmepump.
-
+ 
 Vill överlag se förslag på ett schysst batteri med bra avkastning. Var viktigt att kalkylen skulle se bra ut.
-
+ 
 Säkring: 20A
 Årlig produktion: 16.000kWh
 Installerad effekt: 18,5kWp
-Årlig förbrukning: 20.000kWh
-    </div>
+Årlig förbrukning: 20.000kWh</div>
   </div>
-
-  <!-- BRA ATT VETA -->
-  <div id="bra" class="section">
-    <button class="back-btn" onclick="backToMain()">⬅ Till start</button>
-    <h1>Bra att veta</h1>
-
+ 
+  <!-- ══ BRA ATT VETA ══ -->
+  <div id="bra" class="view">
+    <div class="topbar">
+      <button class="back-btn" onclick="show('menu')">← Till start</button>
+      <span class="topbar-title">Bra att veta</span>
+    </div>
+ 
     <h2>Lutningar</h2>
-    <ul>
-      <li>Platt tak 0–15°</li>
-      <li>Lätt lutning 17–25°</li>
-      <li>Vanlig lutning 27–35°</li>
-      <li>Brant lutning 37–45°</li>
+    <ul class="info-list">
+      <li><span class="dot"></span>Platt tak 0–15°</li>
+      <li><span class="dot"></span>Lätt lutning 17–25°</li>
+      <li><span class="dot"></span>Vanlig lutning 27–35°</li>
+      <li><span class="dot"></span>Brant lutning 37–45°</li>
     </ul>
-
-    <h2>Säkringar – Storlekar och färger</h2>
-    <ul>
-      <li>16A – Grå</li>
-      <li>20A – Blå</li>
-      <li>25A – Gul</li>
-      <li>35A – Svart</li>
-      <li>50A – Vit</li>
-      <li>63A – Koppar</li>
+ 
+    <h2>Säkringar – storlekar & färger</h2>
+    <ul class="info-list">
+      <li><span class="dot"></span>16A – Grå</li>
+      <li><span class="dot"></span>20A – Blå</li>
+      <li><span class="dot"></span>25A – Gul</li>
+      <li><span class="dot"></span>35A – Svart</li>
+      <li><span class="dot"></span>50A – Vit</li>
+      <li><span class="dot"></span>63A – Koppar</li>
     </ul>
-
-    <h2>Taktyper – Takåldrar</h2>
-    <ul>
-      <li>Plåttak – max 25 år</li>
-      <li>Betongtegel – max 50</li>
-      <li>Tegel – max 50</li>
-      <li>Eternit – Se till att kunden vet om att man behöver lägga en plåtskiva mellan eternittaket och solpanelerna, kan även öka kostnaden något.</li>
-      <li>Papp – Tveksam – Ok om kunden säger att insidan är stark och fräsch.</li>
-      <li>Finns även fler, utgå att max åldern är 20 på dem.</li>
+ 
+    <h2>Taktyper – maxålder</h2>
+    <ul class="info-list">
+      <li><span class="dot"></span>Plåttak – max 25 år</li>
+      <li><span class="dot"></span>Betongtegel – max 50 år</li>
+      <li><span class="dot"></span>Tegel – max 50 år</li>
+      <li><span class="dot"></span>Eternit – plåtskiva krävs mellan tak och paneler, kan öka kostnaden</li>
+      <li><span class="dot"></span>Papp – tveksamt, ok om insidan är stark och fräsch</li>
+      <li><span class="dot"></span>Övriga – utgå från max 20 år</li>
     </ul>
-
+ 
     <h2>Förbrukning</h2>
-    <ul>
-      <li>För solceller – Minst 8.000 kWh</li>
-      <li>För batteri (kunden har redan solceller) – Minst 5.000 kWh</li>
+    <ul class="info-list">
+      <li><span class="dot"></span>Solceller – minst 8 000 kWh/år</li>
+      <li><span class="dot"></span>Batteri (befintlig sol) – minst 5 000 kWh/år</li>
     </ul>
-
+ 
     <h2>Fastighetsägare</h2>
-    <ul>
-      <li>1–2 fastighetsägare – Ok</li>
-      <li>Ekonomibyggnad – Upplys kunden om att de ej har tillgång till grönt avdrag</li>
+    <ul class="info-list">
+      <li><span class="dot"></span>1–2 fastighetsägare – Ok</li>
+      <li><span class="dot"></span>Ekonomibyggnad – informera om att grönt avdrag ej gäller</li>
     </ul>
   </div>
-
-  <!-- GÖR DETTA NÄR DU ÄR FÄRDIG -->
-  <div id="avsluta" class="section">
-    <button class="back-btn" onclick="backToMain()">⬅ Till start</button>
-    <h1>Gör detta när du är färdig</h1>
-    <div class="checklist">
-      <ol>
-        <li>Kolla att du är satt som opener</li>
-        <li>Kolla att mötesdag är i formatet (exempel) 31/12 (inte ex. onsdag, inte år, bara datumet.)</li>
-        <li>Kolla att mötestid är i formatet (exempel) 15:00-17:00 (inga mellanrum, exakt i det formatet)</li>
-        <li>Kolla att anteckningen är tillbörlig, ha med det väsentliga</li>
-        <li>Kolla att du tagit alla förutsättningar och skrivit ned dem under anteckningen</li>
-        <li>Se till att adressen är rätt, har du inte dubbelkollat den, kolla upp personen på merinfo.se.<br><strong>OBS!</strong> Adressen måste vara adress, postnummer, ort</li>
-        <li>Se till att anteckningen följer strukturen som exemplet</li>
-      </ol>
+ 
+  <!-- ══ AVSLUTA ══ -->
+  <div id="avsluta" class="view">
+    <div class="topbar">
+      <button class="back-btn" onclick="show('menu')">← Till start</button>
+      <span class="topbar-title">Gör detta när du är färdig</span>
     </div>
-    <p><strong>Missar du några av dessa delar är det stor chans att det blir fel med leadet och att det diskas</strong></p>
+    <div class="section-label" style="margin-bottom:12px;">Bocka av varje punkt</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-box-tick">✓</span></div>
+        <span>Du är satt som opener</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-box-tick">✓</span></div>
+        <span>Mötesdag i rätt format – ex. <strong>31/12</strong> (inte onsdag, inte år)</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-box-tick">✓</span></div>
+        <span>Mötestid i rätt format – ex. <strong>15:00-17:00</strong> (inga mellanrum)</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-box-tick">✓</span></div>
+        <span>Anteckningen är tillbörlig och innehåller det väsentliga</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-box-tick">✓</span></div>
+        <span>Alla förutsättningar är noterade under anteckningen</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-box-tick">✓</span></div>
+        <span>Adressen är rätt – format: <strong>adress, postnummer, ort</strong><br><small style="color:var(--text-muted);font-style:normal;">Dubbelkolla via merinfo.se om osäker</small></span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-box-tick">✓</span></div>
+        <span>Anteckningen följer exempelstrukturen</span>
+      </div>
+    </div>
+    <div class="alert alert-red" style="margin-top:16px;">
+      <div class="alert-title">⚠️ OBS</div>
+      Missar du några av dessa delar är det stor chans att leadet diskas.
+    </div>
   </div>
-
+ 
 </div>
-
+ 
 <script>
-function show(id) {
-  document.getElementById('menu').style.display = 'none';
-  document.querySelectorAll('.section').forEach(el => el.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-
-function backToMain() {
-  document.querySelectorAll('.section').forEach(el => el.style.display = 'none');
-  document.getElementById('menu').style.display = 'flex';
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-
-function backToInfo() {
-  document.querySelectorAll('.section').forEach(el => el.style.display = 'none');
-  document.getElementById('info').style.display = 'block';
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
+  function show(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+ 
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+  }
 </script>
-
+ 
 </body>
 </html>
+ 
