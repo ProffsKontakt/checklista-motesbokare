@@ -1,3 +1,8 @@
+Manual motesbokning · HTML
+
+
+Google Chrome
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -23,6 +28,8 @@
       --red-light: #fef2f2;
       --yellow: #d97706;
       --yellow-light: #fffbeb;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
       --text: #111827;
       --text-muted: #6b7280;
       --text-soft: #374151;
@@ -84,6 +91,38 @@
       font-weight: 400;
     }
  
+    .header-spacer { flex: 1; }
+ 
+    .open-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 6px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+ 
+    .open-tab-btn:hover {
+      background: var(--accent-light);
+      border-color: #c7d4fd;
+      color: var(--accent);
+    }
+ 
+    .open-tab-btn svg {
+      width: 12px; height: 12px;
+      flex-shrink: 0;
+    }
+ 
     /* ── VIEWS ── */
     .view { display: none; }
     .view.active { display: block; animation: fadeIn 0.18s ease; }
@@ -120,11 +159,11 @@
       border-radius: var(--r) var(--r) 0 0;
     }
  
-    .mc-blue::before { background: var(--accent); }
+    .mc-blue::before  { background: var(--accent); }
     .mc-green::before { background: var(--green); }
-    .mc-orange::before { background: var(--orange); }
-    .mc-yellow::before { background: var(--yellow); }
-    .mc-red::before { background: var(--red); }
+    .mc-orange::before{ background: var(--orange); }
+    .mc-yellow::before{ background: var(--yellow); }
+    .mc-red::before   { background: var(--red); }
  
     .menu-card:hover {
       box-shadow: var(--shadow-hover);
@@ -134,24 +173,9 @@
  
     .menu-card:active { transform: translateY(0); }
  
-    .mc-icon {
-      font-size: 1.4rem;
-      display: block;
-      margin-bottom: 8px;
-    }
- 
-    .mc-title {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
- 
-    .mc-sub {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
+    .mc-icon  { font-size: 1.4rem; display: block; margin-bottom: 8px; }
+    .mc-title { font-size: 0.88rem; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+    .mc-sub   { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
  
     /* ── TOPBAR ── */
     .topbar {
@@ -223,7 +247,7 @@
     }
  
     .sub-card .sc-icon { font-size: 1.4rem; display: block; margin-bottom: 6px; }
-    .sub-card .sc-lbl { font-size: 0.75rem; font-weight: 600; color: var(--text-soft); }
+    .sub-card .sc-lbl  { font-size: 0.75rem; font-weight: 600; color: var(--text-soft); }
  
     /* ── STEP LIST ── */
     .steps {
@@ -256,9 +280,9 @@
       margin-top: 1px;
     }
  
-    .step-n.blue { background: var(--accent-light); color: var(--accent); }
+    .step-n.blue   { background: var(--accent-light); color: var(--accent); }
     .step-n.orange { background: var(--orange-light); color: var(--orange); }
-    .step-n.green { background: var(--green-light); color: var(--green); }
+    .step-n.green  { background: var(--green-light);  color: var(--green); }
  
     .step small {
       display: block;
@@ -285,25 +309,13 @@
       margin-bottom: 8px;
     }
  
-    .alert-red {
-      background: var(--red-light);
-      border-color: #fca5a5;
-      color: var(--text-soft);
-    }
-    .alert-red .alert-title { color: var(--red); }
+    .alert-red  { background: var(--red-light);   border-color: #fca5a5; color: var(--text-soft); }
+    .alert-red  .alert-title { color: var(--red); }
  
-    .alert-green {
-      background: var(--green-light);
-      border-color: #86efac;
-      color: var(--text-soft);
-    }
+    .alert-green { background: var(--green-light); border-color: #86efac; color: var(--text-soft); }
     .alert-green .alert-title { color: var(--green); }
  
-    .alert-blue {
-      background: var(--accent-light);
-      border-color: #c7d4fd;
-      color: var(--text-soft);
-    }
+    .alert-blue { background: var(--accent-light); border-color: #c7d4fd; color: var(--text-soft); }
     .alert-blue .alert-title { color: var(--accent); }
  
     /* ── DIVIDER ── */
@@ -418,7 +430,7 @@
  
     .check-item.checked .check-box-tick { display: block; }
  
-    /* ── QUOTE CARDS (Förankring) ── */
+    /* ── BADGES ── */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -433,22 +445,23 @@
       border: 1px solid;
     }
  
-    .badge-blue { background: var(--accent-light); color: var(--accent); border-color: #c7d4fd; }
-    .badge-orange { background: var(--orange-light); color: var(--orange); border-color: #fed7aa; }
-    .badge-green { background: var(--green-light); color: var(--green); border-color: #86efac; }
+    .badge-blue   { background: var(--accent-light);  color: var(--accent);  border-color: #c7d4fd; }
+    .badge-orange { background: var(--orange-light);  color: var(--orange);  border-color: #fed7aa; }
+    .badge-green  { background: var(--green-light);   color: var(--green);   border-color: #86efac; }
+    .badge-purple { background: var(--purple-light);  color: var(--purple);  border-color: #ddd6fe; }
  
+    /* ── QUOTE CARDS ── */
     .quote-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--r);
-      padding: 14px 16px;
+      padding: 14px 16px 14px 20px;
       margin-bottom: 8px;
       font-size: 0.9rem;
       color: var(--text-soft);
       line-height: 1.65;
       box-shadow: var(--shadow-sm);
       position: relative;
-      padding-left: 20px;
     }
  
     .quote-card::before {
@@ -459,9 +472,10 @@
       border-radius: 2px;
     }
  
-    .quote-card.qc-blue::before { background: var(--accent); }
+    .quote-card.qc-blue::before   { background: var(--accent); }
     .quote-card.qc-orange::before { background: var(--orange); }
-    .quote-card.qc-green::before { background: var(--green); }
+    .quote-card.qc-green::before  { background: var(--green); }
+    .quote-card.qc-purple::before { background: var(--purple); }
  
     .quote-note {
       display: block;
@@ -471,6 +485,7 @@
       font-style: italic;
     }
  
+    /* ── TECHNIQUE CARDS ── */
     .technique-card {
       background: var(--surface2);
       border: 1px solid var(--border);
@@ -515,6 +530,15 @@
       <h1>Manual – Mötesbokning</h1>
       <p>Intern guide för mötesbokar</p>
     </div>
+    <div class="header-spacer"></div>
+    <button class="open-tab-btn" onclick="window.open(window.location.href, '_blank')">
+      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 2H2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V7"/>
+        <path d="M8 1h3v3"/>
+        <path d="M11 1L6 6"/>
+      </svg>
+      Öppna i annan flik
+    </button>
   </div>
  
   <!-- ══ HUVUDMENY ══ -->
@@ -645,9 +669,25 @@
  
     <div class="divider"></div>
  
+    <span class="badge badge-purple">Känsloskapande</span>
+    <div class="quote-card qc-purple">
+      "Så ni betalar ca. <strong>(ta deras förbrukning lägg till 5 tusen)</strong> kr om året? – Har ni alltid betalat så mycket för elen?"
+    </div>
+    <div class="quote-card qc-purple">
+      "Det låter som att ni har bra koll, men att det fortfarande kostar mer än vad det behöver – stämmer det?"
+    </div>
+    <div class="quote-card qc-purple">
+      "När ni väl köpte solcellerna, vad skulle återbetalningstiden ligga på? – Hur ser det ut mot dagsläget?"
+    </div>
+ 
+    <div class="divider"></div>
+ 
     <span class="badge badge-orange">Mot slutet</span>
     <div class="quote-card qc-orange">
       "Så att vi kan skapa ett så anpassat förslag till dig som möjligt, vad är det som inte har känts bra med de tidigare förslagen ni tagit in?"
+    </div>
+    <div class="quote-card qc-orange">
+      "Det låter som att ni är i behov av någon lösning men inte riktigt har hittat något som passar er – stämmer det?"
     </div>
  
     <div class="divider"></div>
